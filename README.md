@@ -9,3 +9,5 @@ Text file must be in the structure of:
 [New line]
 
 When used, the text file is converted into a "field 1; field 2; field 3; field n..." format which can be imported to desktop Anki, a space-repetition memory program.
+
+Add the line 'INGOREUP' to ignore all entries (questions) above the line a text file.
