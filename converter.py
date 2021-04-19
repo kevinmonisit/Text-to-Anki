@@ -6,104 +6,86 @@ import warnings
 import sys
 import os
 
-#@TODO: Remove class and make methods helper methods private.
-
-class AnkiConverter():
-    """Converts customzied text files to Anki cards
+def __get_lines(file_dir):
+    """Creates a list of each line in a text file
     """
 
-    def __init__(self, file_dir):
-        pass
+    file = open(file_dir)
+    lines = []
 
-    def __get_lines(self, file_dir):
-        """Creates a list of each line in a text file
-        """
+    while True:
+        line = file.readline()
 
-        file = open(file_dir)
-        lines = []
+        if not line:
+            break
 
-        while True:
-            line = file.readline()
+        if len(line) > 0:
+            lines.append(line.strip())
 
-            if not line:
-                break
+    number_of_lines = len(lines)
 
-            if len(line) > 0:
-                lines.append(line.strip())
+    if number_of_lines % 4 != 0:
+        warnings.warn("Text file has uneven question-to-field format. (n = {})"
+                        .format(number_of_lines), RuntimeWarning)
 
-        number_of_lines = len(lines)
+    file.close()
 
-        if number_of_lines % 4 != 0:
-            warnings.warn("Text file has uneven question-to-field format. (n={})"
-                            .format(number_of_lines), RuntimeWarning)
+    return lines
 
-        file.close()
+def __convert_to_tuples(lines):
+    """Converts lines to a list of tuples which are in a (question, answer) format.
+    """
 
-        return lines
+    cards = []
+    number_of_lines = len(lines)
 
-    def __convert_to_tuples(self, lines):
-        """Converts lines to a list of tuples which are in a (question, answer) format.
-        """
-          
-        cards = []
-        number_of_lines = len(lines)
+    index = 0
+    index_to_start = 0
+    
+    while index < number_of_lines:
 
-        index = 0
-        index_to_start = 0
-        while index < number_of_lines:
-            
-            # @TODO
-            # index_to_start will not be the correct index in the cards list
-            if lines[index] == 'IGNOREUP':
-                index_to_start = index
+        # @TODO
+        # index_to_start will not be the correct index in the cards list
+        if lines[index] == 'IGNOREUP':
+            index_to_start = index
 
-            if index + 2 < number_of_lines:
-                cards.append((lines[index], lines[index+2]))
-            
-            index += 4
+        if index + 2 < number_of_lines:
+            cards.append((lines[index], lines[index+2]))
 
-        if index_to_start == 0 and lines[0] != 'IGNOREUP':
-            warnings.warn("IGNOREUP was not found in the text file. \
-                Converting entire text file to anki cards.", RuntimeWarning)
+        index += 4
 
-        return cards, index_to_start
+    if index_to_start == 0 and lines[0] != 'IGNOREUP':
+        warnings.warn("IGNOREUP was not found in the text file. \
+            Converting entire text file to anki cards.", RuntimeWarning)
 
-    def __convert_tuples_to_anki(self, data, new_file_name, index_to_start):
-        """Converts tuples that are in (question, answer) format into anki-readable text format
-        """
-        file = None
-        
-        if new_file_name is None:
-            file = open(new_file_name, "w")
-        
-        content = ""
+    return cards, index_to_start
 
-        index = index_to_start
-        while index < len(data):
-            entry = "{};{}\n".format(data[index][0], data[index][1])
-            content += entry
-            
-            if new_file_name is None:
-                file.write(entry)
-            
-            index += 1
+def __convert_tuples_to_anki(data, new_file_name, index_to_start):
+    """Converts tuples that are in (question, answer) format into anki-readable text format
+    """
 
-        print("Card data was written to \"{}\" in directory {}".format(new_file_name, os.getcwd()))
-        
-        if new_file_name is None:
-            file.close()
+    content = ""
 
-        return content
+    index = index_to_start
+    while index < len(data):
+        entry = "{};{}\n".format(data[index][0], data[index][1])
+        content += entry
 
-    def convert_to_anki(self, file_dir, new_file_name):
-        """Convert plain text file into Anki-readable cards
+        index += 1
 
-        Args:
-            file_dir ([str]): directory to text file
+    print("Card data was written to \"{}\" in directory {}".format(new_file_name, os.getcwd()))
+    
+    return content
 
-        Returns:
-            [str]: contents of anki-importable text file
-        """
-        cards, index_to_start = self.__convert_to_tuples(self.__get_lines(file_dir))
+def convert_to_anki(file_dir, new_file_name):
+    """Convert plain text file into Anki-readable cards
 
-        return self.__convert_tuples_to_anki(cards, new_file_name, index_to_start)
+    Args:
+        file_dir ([str]): directory to text file
+
+    Returns:
+        [str]: contents of anki-importable text file
+    """
+    cards, index_to_start = __convert_to_tuples(__get_lines(file_dir))
+
+    return __convert_tuples_to_anki(cards, new_file_name, index_to_start)
