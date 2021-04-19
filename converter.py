@@ -3,6 +3,10 @@ Converts text to anki
 """
 
 import warnings
+import sys
+import os
+
+#@TODO: Remove class and make methods helper methods private.
 
 class AnkiConverter():
     """Converts customzied text files to Anki cards
@@ -58,26 +62,40 @@ class AnkiConverter():
             
             index += 4
 
-        if index_to_start == 0 and lines[index] == 'IGNOREUP':
+        if index_to_start == 0 and lines[0] != 'IGNOREUP':
             warnings.warn("IGNOREUP was not found in the text file. \
                 Converting entire text file to anki cards.", RuntimeWarning)
 
         return cards, index_to_start
 
-    def __convert_tuples_to_anki(self, data, index_to_start):
+    def __convert_tuples_to_anki(self, data, new_file_name, index_to_start):
         """Converts tuples that are in (question, answer) format into anki-readable text format
         """
-
+        file = None
+        
+        if new_file_name is None:
+            file = open(new_file_name, "w")
+        
         content = ""
 
         index = index_to_start
         while index < len(data):
-            content += "{};{}\n".format(data[index][0], data[index][1])
+            entry = "{};{}\n".format(data[index][0], data[index][1])
+            content += entry
+            
+            if new_file_name is None:
+                file.write(entry)
+            
             index += 1
+
+        print("Card data was written to \"{}\" in directory {}".format(new_file_name, os.getcwd()))
+        
+        if new_file_name is None:
+            file.close()
 
         return content
 
-    def convert_to_anki(self, file_dir):
+    def convert_to_anki(self, file_dir, new_file_name):
         """Convert plain text file into Anki-readable cards
 
         Args:
@@ -88,4 +106,4 @@ class AnkiConverter():
         """
         cards, index_to_start = self.__convert_to_tuples(self.__get_lines(file_dir))
 
-        return self.__convert_tuples_to_anki(cards, index_to_start)
+        return self.__convert_tuples_to_anki(cards, new_file_name, index_to_start)
