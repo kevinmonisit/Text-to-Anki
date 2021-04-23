@@ -6,29 +6,42 @@ import converter
 import os
 
 class test_basic(unittest.TestCase):
+    
+    def setUp(self):
+        self.test_content = "What is my name?\n\nKevin\n\n2+2=\n\n4"
+        self.test_file_name = "./tests/__tester__.txt"
 
-    def __delete_test_files(self, tester_name, output_name):
-        names = [tester_name, output_name]
+    def _write_test_file(self):
+        if os.path.exists(self.test_file_name):
+            os.remove(self.test_file_name)
+        else:
+            print(self.test_file_name)
         
-        for name in names:        
-            if os.path.exists(name):
-                os.remove(name)
-            else:
-                print("OKAY. File {} does not exist, no need to delete.".format(name))
+        f = open(self.test_file_name, "w")
+        f.write(self.test_content)
+        f.close()
+     
+    def test_get_lines(self):
+        self._write_test_file()
 
-    def test_convert_to_anki(self):
+        content = converter.get_lines(self.test_file_name)
+    
+        expected_content = ["What is my name?", '', "Kevin", '',
+                            "2+2=", '', "4"]
         
-        tester_input_name = "tester.txt"
-        output_name = "cards.txt"
+        self.assertEqual(content, expected_content);
+    
+    def test_convert_list_to_tuples(self):
+        self._write_test_file()
 
-        self.__delete_test_files(tester_input_name, output_name)
+        content = converter.get_lines(self.test_file_name)
+        
+        content = converter._convert_to_tuples(content)
 
-        content = converter.convert_to_anki(tester_input_name, output_name)
-        print(content)
+        expected_content = [("What is my name?", "Kevin"), 
+                            ("2+2=", "4")]
 
-
-        self.assertEqual(1,1)
-
+        self.assertEqual(content, expected_content)
 
 
 if __name__ == "__main__":

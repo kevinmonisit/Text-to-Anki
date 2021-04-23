@@ -2,3 +2,18 @@
 
 - Work on getting multiple field functionality
 - Work on getting tags
+- Work on line breakage
+
+For example:
+
+What is 2 + 2 = ?
+
+I think that
+the answer is 4
+
+
+ ^^^^ Even though the line breaks, UNTIL there is a blank line, the answer will
+ contain both of the lines
+
+
+ - 

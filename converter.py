@@ -3,13 +3,16 @@ Converts text to anki
 """
 
 import warnings
-import sys
-import os
 
-def __get_lines(file_dir):
-    """Creates a list of each line in a text file
+def get_lines(file_dir):
+    """Creates an array of lines from a text file
+
+    Args:
+        file_dir ([str]): file directory to read
+
+    Returns:
+        [list]: a list of all lines from text file
     """
-
     file = open(file_dir)
     lines = []
 
@@ -32,7 +35,7 @@ def __get_lines(file_dir):
 
     return lines
 
-def __convert_to_tuples(lines):
+def _convert_to_tuples(lines):
     """Converts lines to a list of tuples which are in a (question, answer) format.
     """
 
@@ -58,34 +61,30 @@ def __convert_to_tuples(lines):
         warnings.warn("IGNOREUP was not found in the text file. \
             Converting entire text file to anki cards.", RuntimeWarning)
 
-    return cards, index_to_start
+    return cards
 
-def __convert_tuples_to_anki(data, new_file_name, index_to_start):
+def __convert_tuples_to_anki(data):
     """Converts tuples that are in (question, answer) format into anki-readable text format
     """
 
     content = ""
-
-    index = index_to_start
+    index = 0
+    
     while index < len(data):
         entry = "{};{}\n".format(data[index][0], data[index][1])
         content += entry
 
         index += 1
 
-    print("Card data was written to \"{}\" in directory {}".format(new_file_name, os.getcwd()))
-    
     return content
 
-def convert_to_anki(file_dir, new_file_name):
-    """Convert plain text file into Anki-readable cards
+def convert_to_anki(content):
+    """Converts data from a read text file into anki-importable text
 
     Args:
-        file_dir ([str]): directory to text file
-
-    Returns:
-        [str]: contents of anki-importable text file
+        content ([list]): list of all lines of a correctly-formatted text file (use get_lines)
     """
-    cards, index_to_start = __convert_to_tuples(__get_lines(file_dir))
 
-    return __convert_tuples_to_anki(cards, new_file_name, index_to_start)
+    cards = __convert_to_tuples(content)
+
+    return __convert_tuples_to_anki(cards)
