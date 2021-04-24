@@ -41,4 +41,6 @@ A file called cards.txt, which is importable to Anki, will be created in the pro
 
 ## Importing Cards into Anki
 
+To import cards into Anki, open the Anki application on your desktop. In the bottom, there will be a button named 'Import.' After clicking the button, import the cards.txt file. Next, select the "Allow HTML tags" check.
+
 ## Adding Tags, Card Type, and Fields
