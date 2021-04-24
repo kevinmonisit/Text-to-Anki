@@ -2,6 +2,9 @@
 
 - Work on getting multiple field functionality
 - Work on getting tags
+    - You can add tags:tag1 tag2 to the top of the files
+    and add tags to all the cards
+- Work on whether card will be typed or not
 - Work on line breakage
 
 For example:
@@ -16,4 +19,6 @@ the answer is 4
  contain both of the lines
 
 
- - 
+ - Add multi-line functionality
+ - Work on fixing duplicates
+ - HTML tags <br>

@@ -2,6 +2,7 @@
 Converts text to anki
 """
 
+from os import error
 import warnings
 
 def get_lines(file_dir):
@@ -77,6 +78,50 @@ def __convert_tuples_to_anki(data):
         index += 1
 
     return content
+
+def add_typed_answers(tuples_list) -> tuple:
+    """
+    
+        Tests the functionality of adding a sign that the card's
+        answer is meant to be typed or not.
+        
+        If there is a 'T' or 't', the answer will be typed.
+        
+        Function returns a tuple containing (list of typed cards, list of non-typed cards)
+
+    Args:
+        lines ([list]): Receives list of tuples in (question, answer) format
+    """
+    
+    typed_questions = []
+    non_typed_questions = []
+    
+    for i in tuples_list:
+        if '?' not in i[0]:
+            print("Error for the question: {}".format(i[0]))
+            raise ValueError("Question incorrectly formatted. Line does not have a question mark at the end of the question.")
+        
+        # Format of i[0] would be "<question> <?> <typed answer or not>"
+        # question = [<question>, <type>]
+        # if there is no 'T', then the question is assumed to be not typed
+        question_split = i[0].split('?')
+        
+        if(question_split[1].strip().lower() == "t"):
+            # i[0] is the question
+            # i[1] is the answer
+            typed_questions.append((i[0], i[1]))
+        else:
+            non_typed_questions.append((i[0], i[1]))
+    
+
+def _is_list_valid(lines):
+    """[summary]
+
+    Args:
+        lines ([type]): [description]
+    """
+    pass
+       
 
 def convert_to_anki(content):
     """Converts data from a read text file into anki-importable text
