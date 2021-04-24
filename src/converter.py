@@ -5,6 +5,7 @@ Converts text to anki
 from os import error
 import warnings
 
+
 def get_lines(file_dir):
     """Creates an array of lines from a text file
 
@@ -30,11 +31,12 @@ def get_lines(file_dir):
 
     if number_of_lines % 4 != 0:
         warnings.warn("Text file has uneven question-to-field format. (n = {})"
-                        .format(number_of_lines), RuntimeWarning)
+                      .format(number_of_lines), RuntimeWarning)
 
     file.close()
 
     return lines
+
 
 def _convert_to_tuples(lines):
     """Converts lines to a list of tuples which are in a (question, answer) format.
@@ -45,7 +47,7 @@ def _convert_to_tuples(lines):
 
     index = 0
     index_to_start = 0
-    
+
     while index < number_of_lines:
 
         # @TODO
@@ -54,7 +56,7 @@ def _convert_to_tuples(lines):
             index_to_start = index
 
         if index + 2 < number_of_lines:
-            cards.append((lines[index], lines[index+2]))
+            cards.append((lines[index], lines[index + 2]))
 
         index += 4
 
@@ -64,13 +66,14 @@ def _convert_to_tuples(lines):
 
     return cards
 
+
 def __convert_tuples_to_anki(data):
     """Converts tuples that are in (question, answer) format into anki-readable text format
     """
 
     content = ""
     index = 0
-    
+
     while index < len(data):
         entry = "{};{}\n".format(data[index][0], data[index][1])
         content += entry
@@ -78,6 +81,7 @@ def __convert_tuples_to_anki(data):
         index += 1
 
     return content
+
 
 def add_typed_answers(tuples_list) -> tuple:
     """
@@ -92,35 +96,36 @@ def add_typed_answers(tuples_list) -> tuple:
     Args:
         lines ([list]): Receives list of tuples in (question, answer) format
     """
-    
+
     typed_questions = []
     non_typed_questions = []
-    
-    #tuples list is list of (questions, answer)
+
+    # tuples list is list of (questions, answer)
     for i in tuples_list:
-        
+
         question = i[0]
         answer = i[1]
-        
+
         if '?' not in question:
             print("Error for the question: {}".format(question))
-            raise ValueError("Question incorrectly formatted. Line does not have a question mark at the end of the question.")
-        
+            raise ValueError("Question incorrectly formatted. Line does not have a question mark at the end of the "
+                             "question.")
+
         # Format of i[0] would be "<question> <?> <typed answer or not>"
         # question = [<question>, <type>]
         # if there is no 'T', then the question is assumed to be not typed
         question_split = question.split('?')
-        
-        if(len(question_split) > 1 and \
-            question_split[1].strip().lower() == "t"):
-            question_and_answer = (question_split[0] + '?', answer)
-            
+        question_and_answer = (question_split[0] + '?', answer)
+
+        if (len(question_split) > 1 and
+                question_split[1].strip().lower() == "t"):
             # i[1] is the answer in (question, answer)
             typed_questions.append(question_and_answer)
         else:
             non_typed_questions.append(question_and_answer)
-    
+
     return typed_questions, non_typed_questions
+
 
 def _is_list_valid(lines):
     """[summary]
@@ -129,7 +134,7 @@ def _is_list_valid(lines):
         lines ([type]): [description]
     """
     pass
-       
+
 
 def convert_to_anki(content):
     """Converts data from a read text file into anki-importable text
