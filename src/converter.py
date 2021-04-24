@@ -96,23 +96,31 @@ def add_typed_answers(tuples_list) -> tuple:
     typed_questions = []
     non_typed_questions = []
     
+    #tuples list is list of (questions, answer)
     for i in tuples_list:
-        if '?' not in i[0]:
-            print("Error for the question: {}".format(i[0]))
+        
+        question = i[0]
+        answer = i[1]
+        
+        if '?' not in question:
+            print("Error for the question: {}".format(question))
             raise ValueError("Question incorrectly formatted. Line does not have a question mark at the end of the question.")
         
         # Format of i[0] would be "<question> <?> <typed answer or not>"
         # question = [<question>, <type>]
         # if there is no 'T', then the question is assumed to be not typed
-        question_split = i[0].split('?')
+        question_split = question.split('?')
         
-        if(question_split[1].strip().lower() == "t"):
-            # i[0] is the question
-            # i[1] is the answer
-            typed_questions.append((i[0], i[1]))
+        if(len(question_split) > 1 and \
+            question_split[1].strip().lower() == "t"):
+            question_and_answer = (question_split[0] + '?', answer)
+            
+            # i[1] is the answer in (question, answer)
+            typed_questions.append(question_and_answer)
         else:
-            non_typed_questions.append((i[0], i[1]))
+            non_typed_questions.append(question_and_answer)
     
+    return typed_questions, non_typed_questions
 
 def _is_list_valid(lines):
     """[summary]

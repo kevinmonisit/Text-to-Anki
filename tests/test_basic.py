@@ -10,6 +10,19 @@ class test_basic(unittest.TestCase):
     def setUp(self):
         self.test_content = "What is my name?\n\nKevin\n\n2+2=\n\n4"
         self.test_file_name = "./tests/__tester__.txt"
+        self.questions = ["What is my name? T",
+                          "What is my name?? T",
+                          "What is my name? ",
+                          "What is my name? TT",
+                          "What is name T",
+                          "What is the name?T ",
+                          "What is my name T"]
+        
+        self.test_QAs = []
+        
+        for i in self.questions:
+            self.test_QAs.append((i, "test answer"))
+        
 
     def _write_test_file(self):
         if os.path.exists(self.test_file_name):
@@ -49,10 +62,10 @@ class test_basic(unittest.TestCase):
         self.assertRaises(ValueError, lambda: converter.add_typed_answers(content))
         
     
-    def __test_typed_answers(self):
+    def test_typed_answers(self):
         content = [("What is my name? T", "Kevin"), 
-                            ("2+2= ?", "4")]
-        
+                            (" 2+ 2 = ?", "4")]
+        #breakpoint()
         data = converter.add_typed_answers(content)
 
         # expected return value is a tuple containing lists
@@ -61,7 +74,7 @@ class test_basic(unittest.TestCase):
         expected_data = ([("What is my name?", "Kevin")], 
                          [("2 + 2 = ?", "4")])
         
-        self.assertEqual(data, expected_data)        
+        self.assertEqual(data, expected_data)
         
 if __name__ == "__main__":
     unittest.main()
