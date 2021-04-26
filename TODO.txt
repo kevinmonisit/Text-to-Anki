@@ -22,3 +22,13 @@ the answer is 4
  - Add multi-line functionality
  - Work on fixing duplicates
  - HTML tags <br>
+
+
+ Working on:
+
+ - check_QA_is_valid() function
+    - do it so split QA answer doesn't have to verify questions
+    - in itself DONE
+
+    
+ - Fix INGOREUP functionality

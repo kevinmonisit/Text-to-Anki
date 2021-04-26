@@ -56,8 +56,11 @@ def _convert_to_tuples(lines):
             index_to_start = index
 
         if index + 2 < number_of_lines:
-            cards.append((lines[index], lines[index + 2]))
-
+            _QA = (lines[index], lines[index + 2])
+            _checK_QA_is_valid(_QA)
+            
+            cards.append(_QA)
+            
         index += 4
 
     if index_to_start == 0 and lines[0] != 'IGNOREUP':
@@ -67,7 +70,7 @@ def _convert_to_tuples(lines):
     return cards
 
 
-def __convert_tuples_to_anki(data):
+def _convert_tuples_to_anki(data):
     """Converts tuples that are in (question, answer) format into anki-readable text format
     """
 
@@ -83,7 +86,7 @@ def __convert_tuples_to_anki(data):
     return content
 
 
-def add_typed_answers(tuples_list) -> tuple:
+def _split_QAs_answer(tuples_list) -> tuple:
     """
     
         Tests the functionality of adding a sign that the card's
@@ -127,13 +130,18 @@ def add_typed_answers(tuples_list) -> tuple:
     return typed_questions, non_typed_questions
 
 
-def _is_list_valid(lines):
-    """[summary]
+def _checK_QA_is_valid(entry: tuple):
+    """Checks whether a QA entry is valid.
 
     Args:
-        lines ([type]): [description]
+        entry ([tuple]): a tuple in the format of (question, answer)
     """
-    pass
+
+    if '?' not in entry[0]:
+        print("Error at question {}".format(entry[0]))
+        raise ValueError("An entry does not have a question mark in its question")
+    
+    return True
 
 
 def convert_to_anki(content):

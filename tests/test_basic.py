@@ -9,7 +9,7 @@ import os
 class TestBasic(unittest.TestCase):
 
     def setUp(self):
-        self.test_content = "What is my name?\n\nKevin\n\n2+2=\n\n4"
+        self.test_content = "What is my name?\n\nKevin\n\n2+2=?\n\n4"
         self.test_file_name = "./tests/__tester__.txt"
         self.questions = ["What is my name? T",
                           "What is my name?? T",
@@ -40,7 +40,7 @@ class TestBasic(unittest.TestCase):
         content = converter.get_lines(self.test_file_name)
 
         expected_content = ["What is my name?", '', "Kevin", '',
-                            "2+2=", '', "4"]
+                            "2+2=?", '', "4"]
 
         self.assertEqual(content, expected_content);
 
@@ -51,7 +51,7 @@ class TestBasic(unittest.TestCase):
         content = converter._convert_to_tuples(content)
 
         expected_content = [("What is my name?", "Kevin"),
-                            ("2+2=", "4")]
+                            ("2+2=?", "4")]
 
         self.assertEqual(content, expected_content)
 
@@ -59,13 +59,13 @@ class TestBasic(unittest.TestCase):
     def test_typed_answers_error(self):
         content = [("What is my name", "Kevin")]
 
-        self.assertRaises(ValueError, lambda: converter.add_typed_answers(content))
+        self.assertRaises(ValueError, lambda: converter._split_QAs_answer(content))
 
     def test_typed_answers(self):
         content = [("What is my name? T", "Kevin"),
                    ("2 + 2 = ?", "4")]
 
-        data = converter.add_typed_answers(content)
+        data = converter._split_QAs_answer(content)
 
         # expected return value is a tuple containing lists
         # within each list are tuples in the (question, answer) format
