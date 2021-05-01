@@ -1,6 +1,6 @@
 # Text-to-Anki
 
-Easily convert text files to [Anki](https://apps.ankiweb.net/) flash cards, an intelligent flash card system built on space-repetition. If you are taking notes and wish to convert a significant amount of facts into Anki flash cards, it can be time-consuming to continuously add flash cards with different tags and formats (e.g. typed answers). It's much more efficient to create preliminary cards in a text file while studying and then import them en masse into Anki. In regards to language learning, Matt vs. Japan suggests this technique when reading/watching media in your target language. His work (and other suggestions) can be read at [refold.la](refold.la) or his [channel](https://www.youtube.com/watch?v=kny7eCfx9dA&ab_channel=MattvsJapan).
+Easily convert text files to [Anki](https://apps.ankiweb.net/) flash cards, an intelligent flash card system built on space-repetition. If you are taking notes and wish to convert a significant amount of facts into Anki flash cards, it can be time-consuming to continuously add flash cards with different tags and formats (e.g. typed answers). It's much more efficient to create preliminary cards in a text file while studying and then import them _en masse_ into Anki. In regards to language learning, Matt vs. Japan suggests this technique when reading/watching media in your target language. His work (and other suggestions) can be read at [refold.la](refold.la) or his [channel](https://www.youtube.com/watch?v=kny7eCfx9dA&ab_channel=MattvsJapan).
 
 ## Structure of the Text File
 ```
