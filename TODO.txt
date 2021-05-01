@@ -30,5 +30,5 @@ the answer is 4
     - do it so split QA answer doesn't have to verify questions
     - in itself DONE
 
-    
+
  - Fix INGOREUP functionality

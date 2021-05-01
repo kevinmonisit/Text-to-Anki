@@ -42,7 +42,7 @@ class TestBasic(unittest.TestCase):
         expected_content = ["What is my name?", '', "Kevin", '',
                             "2+2=?", '', "4"]
 
-        self.assertEqual(content, expected_content);
+        self.assertEqual(content, expected_content)
 
     def test_convert_list_to_tuples(self):
         self._write_test_file()
@@ -59,7 +59,8 @@ class TestBasic(unittest.TestCase):
     def test_typed_answers_error(self):
         content = [("What is my name", "Kevin")]
 
-        self.assertRaises(ValueError, lambda: converter._split_QAs_answer(content))
+        self.assertRaises(ValueError,
+                          lambda: converter._split_QAs_answer(content))
 
     def test_typed_answers(self):
         content = [("What is my name? T", "Kevin"),

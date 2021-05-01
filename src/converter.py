@@ -38,8 +38,23 @@ def get_lines(file_dir):
     return lines
 
 
+def convert_to_anki(content):
+    """Converts data from a read text file into anki-importable text
+
+    Args:
+        content ([list]): list of all lines of a correctly-formatted text file
+        (use get_lines)
+    """
+
+    cards = _convert_to_tuples(content)
+
+    return _convert_tuples_to_anki(cards)
+
+
 def _convert_to_tuples(lines):
-    """Converts lines to a list of tuples which are in a (question, answer) format.
+    """
+        Converts lines to a list of tuples which are in a (question, answer)
+        format.
     """
 
     cards = []
@@ -57,10 +72,10 @@ def _convert_to_tuples(lines):
 
         if index + 2 < number_of_lines:
             _QA = (lines[index], lines[index + 2])
-            _checK_QA_is_valid(_QA)
-            
+            _check_QA_is_valid(_QA)
+
             cards.append(_QA)
-            
+
         index += 4
 
     if index_to_start == 0 and lines[0] != 'IGNOREUP':
@@ -71,7 +86,9 @@ def _convert_to_tuples(lines):
 
 
 def _convert_tuples_to_anki(data):
-    """Converts tuples that are in (question, answer) format into anki-readable text format
+    """
+        Converts tuples that are in (question, answer) format into
+        anki-readable text format
     """
 
     content = ""
@@ -88,13 +105,14 @@ def _convert_tuples_to_anki(data):
 
 def _split_QAs_answer(tuples_list) -> tuple:
     """
-    
+
         Tests the functionality of adding a sign that the card's
         answer is meant to be typed or not.
-        
+
         If there is a 'T' or 't', the answer will be typed.
-        
-        Function returns a tuple containing (list of typed cards, list of non-typed cards)
+
+        Function returns a tuple containing (list of typed cards, list
+        of non-typed cards)
 
     Args:
         lines ([list]): Receives list of tuples in (question, answer) format
@@ -111,7 +129,9 @@ def _split_QAs_answer(tuples_list) -> tuple:
 
         if '?' not in question:
             print("Error for the question: {}".format(question))
-            raise ValueError("Question incorrectly formatted. Line does not have a question mark at the end of the "
+            raise ValueError("Question incorrectly formatted."
+                             "Line does not have a question mark at the end"
+                             "of the"
                              "question.")
 
         # Format of i[0] would be "<question> <?> <typed answer or not>"
@@ -130,7 +150,7 @@ def _split_QAs_answer(tuples_list) -> tuple:
     return typed_questions, non_typed_questions
 
 
-def _checK_QA_is_valid(entry: tuple):
+def _check_QA_is_valid(entry: tuple):
     """Checks whether a QA entry is valid.
 
     Args:
@@ -139,18 +159,7 @@ def _checK_QA_is_valid(entry: tuple):
 
     if '?' not in entry[0]:
         print("Error at question {}".format(entry[0]))
-        raise ValueError("An entry does not have a question mark in its question")
-    
+        raise ValueError("An entry does not have a question mark in its"
+                         "question")
+
     return True
-
-
-def convert_to_anki(content):
-    """Converts data from a read text file into anki-importable text
-
-    Args:
-        content ([list]): list of all lines of a correctly-formatted text file (use get_lines)
-    """
-
-    cards = __convert_to_tuples(content)
-
-    return __convert_tuples_to_anki(cards)

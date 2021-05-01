@@ -1,6 +1,7 @@
 .vscode
 __pycache__
 .DS_Store
+.idea/
 .idea/.gitignore
 .idea/misc.xml
 .idea/modules.xml
@@ -8,3 +9,5 @@ __pycache__
 .idea/vcs.xml
 .idea/inspectionProfiles/profiles_settings.xml
 workspace.code-workspace
+_temp/temp.txt
+_temp/test.py
