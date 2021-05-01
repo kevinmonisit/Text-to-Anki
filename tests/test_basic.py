@@ -5,6 +5,10 @@ import unittest
 from src import converter
 import os
 
+# @TODO:
+# Make tests more comprehensive. Lean away from creating a new file
+# and using the hard-coded questions.
+
 
 class TestBasic(unittest.TestCase):
 
@@ -60,13 +64,13 @@ class TestBasic(unittest.TestCase):
         content = [("What is my name", "Kevin")]
 
         self.assertRaises(ValueError,
-                          lambda: converter._split_QAs_answer(content))
+                          lambda: converter._divide_tuples_by_type(content))
 
     def test_typed_answers(self):
         content = [("What is my name? T", "Kevin"),
                    ("2 + 2 = ?", "4")]
 
-        data = converter._split_QAs_answer(content)
+        data = converter._divide_tuples_by_type(content)
 
         # expected return value is a tuple containing lists
         # within each list are tuples in the (question, answer) format
@@ -75,6 +79,16 @@ class TestBasic(unittest.TestCase):
                          [("2 + 2 = ?", "4")])
 
         self.assertEqual(data, expected_data)
+
+    def test_typed_answers_output(self):
+        self._write_test_file()
+
+        lines = converter.get_lines(self.test_file_name)
+        content = converter.convert_to_anki(lines)
+
+        expected_content = ('', 'What is my name?;Kevin\n2+2=?;4\n')
+
+        self.assertEqual(content, expected_content)
 
 
 if __name__ == "__main__":

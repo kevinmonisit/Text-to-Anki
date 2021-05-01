@@ -3,7 +3,8 @@ Main module. Run to convert text files to anki-importable cards.
 """
 
 import sys
-import converter
+import src.converter as converter
+
 
 if __name__ == "__main__":
     """
@@ -19,4 +20,16 @@ if __name__ == "__main__":
             multiple text files separating the categories.
     """
 
-    pass
+    if len(sys.argv) > 3:
+        pass
+    elif len(sys.argv) == 2:
+        source = sys.argv[1]
+        lines = converter.get_lines(source)
+
+        content = converter.convert_to_anki(lines)
+        for i in content:
+            print(i)
+
+    else:
+        raise Exception("Invalid number of arguments."
+                        "Check README.md on how to use.")

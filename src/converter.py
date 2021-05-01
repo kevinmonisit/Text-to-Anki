@@ -38,17 +38,23 @@ def get_lines(file_dir):
     return lines
 
 
-def convert_to_anki(content):
-    """Converts data from a read text file into anki-importable text
+def convert_to_anki(content) -> tuple:
+    """
+    Converts data from a read text file into anki-importable text.
+
+    Returns a tuple of two lists. First list contains
+    all questions that have answers that are supposed to be typed
+    and the second contains QAs that are not typed.
 
     Args:
-        content ([list]): list of all lines of a correctly-formatted text file
-        (use get_lines)
+        content ([tuple]): returns tuple of two lists: QAS with typed answers
+        and QAs without typed answers
     """
 
     cards = _convert_to_tuples(content)
+    typed, non_typed = _divide_tuples_by_type(cards)
 
-    return _convert_tuples_to_anki(cards)
+    return _convert_tuples_to_anki(typed), _convert_tuples_to_anki(non_typed)
 
 
 def _convert_to_tuples(lines):
@@ -85,10 +91,20 @@ def _convert_to_tuples(lines):
     return cards
 
 
-def _convert_tuples_to_anki(data):
+def _convert_tuples_to_anki(data) -> str:
     """
-        Converts tuples that are in (question, answer) format into
-        anki-readable text format
+    Converts tuples that are in a (Question, Answer) format
+    into a string that is Anki-readable and can be
+    imported into Anki.
+
+    (Question, Answer) converts to Question;Answer.
+
+    Args:
+        data ([list]): A list of tuples in a (Question, Answer) format.
+
+    Returns:
+        [str]: A string is returned that is in a format that
+        can be read by Anki. E.g. what is 2 + 2?;4
     """
 
     content = ""
@@ -103,7 +119,7 @@ def _convert_tuples_to_anki(data):
     return content
 
 
-def _split_QAs_answer(tuples_list) -> tuple:
+def _divide_tuples_by_type(tuples_list) -> tuple:
     """
 
         Tests the functionality of adding a sign that the card's
@@ -112,7 +128,7 @@ def _split_QAs_answer(tuples_list) -> tuple:
         If there is a 'T' or 't', the answer will be typed.
 
         Function returns a tuple containing (list of typed cards, list
-        of non-typed cards)
+        of non-typed cards) in the format (Question, Answer)
 
     Args:
         lines ([list]): Receives list of tuples in (question, answer) format
