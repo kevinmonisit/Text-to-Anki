@@ -16,6 +16,10 @@ How much wood would a woodchuck chuck if a woodchuck could chuck wood?
 
 He would chuck, he would, as much as he could, and chuck as much wood as a woodchuck would if a woodchuck could chuck wood.
 
+Binomial Probability of at least x successes
+
+1 - binomcdf(n, p, x-1)
+
 [Question]
 
 [Answer]
