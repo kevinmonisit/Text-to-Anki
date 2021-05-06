@@ -24,7 +24,7 @@ def get_lines(file_dir, look_for_ignore_up=False):
 
     begin_adding_entries = False
 
-    # if we aren't looking for an ingore key
+    # if we aren't looking for an ignore key
     # we can just start adding entries from the start of the text file
     if not look_for_ignore_up:
         begin_adding_entries = True
