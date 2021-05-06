@@ -5,8 +5,10 @@ Converts text to anki
 from os import error
 import warnings
 
+IGNORE_KEY = "IGNOREUP"
 
-def get_lines(file_dir):
+
+def get_lines(file_dir, look_for_ignore_up=False):
     """Creates an array of lines from a text file
 
     Args:
@@ -18,14 +20,28 @@ def get_lines(file_dir):
     file = open(file_dir)
     lines = []
 
-    while True:
-        line = file.readline()
+    line = file.readline()
+
+    begin_adding_entries = False
+
+    # if we aren't looking for an ingore key
+    # we can just start adding entries from the start of the text file
+    if not look_for_ignore_up:
+        begin_adding_entries = True
+
+    while line:
 
         if not line:
             break
 
-        if len(line) > 0:
+        if line.strip() == IGNORE_KEY:
+            # start adding new QA entries
+            begin_adding_entries = True
+
+        if len(line) > 0 and begin_adding_entries:
             lines.append(line.strip())
+
+        line = file.readline()
 
     number_of_lines = len(lines)
 

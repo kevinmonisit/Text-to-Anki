@@ -20,9 +20,7 @@ if __name__ == "__main__":
             multiple text files separating the categories.
     """
 
-    if len(sys.argv) > 3:
-        pass
-    elif len(sys.argv) == 2:
+    if len(sys.argv) == 2:
         source = sys.argv[1]
         lines = converter.get_lines(source)
 
