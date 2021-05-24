@@ -86,9 +86,24 @@ class TestBasic(unittest.TestCase):
         lines = converter.get_lines(self.test_file_name)
         content = converter.convert_to_anki(lines)
 
+        # expected content will be two lists: one of typed and non-typed
+        # answers
         expected_content = ('', 'What is my name?;Kevin\n2+2=?;4\n')
 
         self.assertEqual(content, expected_content)
+
+    def test_ignore_up_key(self):
+        """
+        Successfully ignore lines above ignore up key.
+        """
+        pass
+
+    def test_ignore_key_errors(self):
+        """
+        In cases of multiple ignore-up keys, incorrect placement, etc.,
+        raise an error.
+        """
+        pass
 
 
 if __name__ == "__main__":

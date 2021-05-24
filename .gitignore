@@ -12,3 +12,6 @@ workspace.code-workspace
 _temp/temp.txt
 _temp/test.py
 src/__init__.pyc
+notes.txt
+cards.txt
+test.txt

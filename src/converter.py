@@ -8,6 +8,49 @@ import warnings
 IGNORE_KEY = "IGNOREUP"
 
 
+def ____get_lines_(file_dir, IGNOREUP_exists=False) -> list:
+    """[summary]
+
+    Args:
+        file_dir ([type]): [description]
+        IGNOREUP_exists (bool, optional): [description]. Defaults to False.
+
+    Returns:
+        list: [description]
+    """
+
+    file = open(file_dir)
+    lines = []
+
+    line = ""
+
+    while line:
+        if not line:
+            break
+
+        lines.append(line.readline())
+
+    # starting from the bottom of the text file
+    # search for the ignore key.
+    # the line where the ignore key is will be the starting point
+
+    index = 0
+
+    if(IGNOREUP_exists):
+        index = len(lines) - 1
+        while index > 0:
+            if(lines[index].strip() == "IGNOREUP"):
+                break
+
+            index -= 1
+
+        raise Exception("IGNOREUP_exists = True but IGNOREUP was not found in."
+                        "the source.")
+
+    # index + 1 in order to ignore the ignore key
+    return lines[(index + 1):len(lines)]
+
+
 def get_lines(file_dir, look_for_ignore_up=False):
     """Creates an array of lines from a text file
 
@@ -38,6 +81,9 @@ def get_lines(file_dir, look_for_ignore_up=False):
             # start adding new QA entries
             begin_adding_entries = True
 
+            # skip the line where the ignore key ist
+            line = file.readline()
+
         if len(line) > 0 and begin_adding_entries:
             lines.append(line.strip())
 
@@ -63,7 +109,11 @@ def convert_to_anki(content) -> tuple:
     and the second contains QAs that are not typed.
 
     Args:
-        content ([tuple]): returns tuple of two lists: QAS with typed answers
+        content ([list]): contains the lines of a source file that contains
+        the questions and answers
+
+    Returns:
+        tuple of two lists: QAS with typed answers
         and QAs without typed answers
     """
 
@@ -105,6 +155,44 @@ def _convert_to_tuples(lines):
             Converting entire text file to anki cards.", RuntimeWarning)
 
     return cards
+
+
+def __convert_to_tuples(lines) -> list:
+    """Converts the lines that are in a text file into question and answer
+       tuples (question, answer)
+
+    Args:
+        lines ([type]): [description]
+
+    Returns:
+        [list]: list of QAs in tuples --> (question, answer)
+    """
+    QUESTION = 1
+    ANSWER = 0
+
+    look_for = QUESTION
+
+    cards = []
+    question = ""
+    answer = ""
+
+    for i in lines:
+
+        if len(i) <= 1:
+            continue
+
+        if look_for == QUESTION:
+            question = i
+            look_for = ANSWER
+
+        elif look_for == ANSWER:
+            answer = i
+
+            _QA = (question, answer)
+            _check_QA_is_valid(_QA)
+            cards.append(_QA)
+
+            look_for = QUESTION
 
 
 def _convert_tuples_to_anki(data) -> str:

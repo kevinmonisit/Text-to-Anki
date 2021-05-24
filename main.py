@@ -22,7 +22,7 @@ if __name__ == "__main__":
 
     if len(sys.argv) == 2:
         source = sys.argv[1]
-        lines = converter.get_lines(source)
+        lines = converter.get_lines(source, look_for_ignore_up=True)
 
         content = converter.convert_to_anki(lines)
         for i in content:
