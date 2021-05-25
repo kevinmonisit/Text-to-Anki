@@ -106,5 +106,16 @@ class TestBasic(unittest.TestCase):
         pass
 
 
+class TestParsing(unittest.TestCase):
+
+    def test_dynamic_QA_parsing(self):
+        # rename the _get_lines method
+        lines = converter._get_lines_('./tests/samples/dynamic1.txt',
+                                      IGNOREUP_exists=True)
+        cards = converter._convert_to_tuples_(lines)
+
+        self.assertEqual(6, len(cards))
+
+
 if __name__ == "__main__":
     unittest.main()

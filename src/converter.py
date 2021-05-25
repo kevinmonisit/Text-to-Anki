@@ -8,12 +8,16 @@ import warnings
 IGNORE_KEY = "IGNOREUP"
 
 
-def ____get_lines_(file_dir, IGNOREUP_exists=False) -> list:
-    """[summary]
+def _get_lines_(file_dir, IGNOREUP_exists=False) -> list:
+    """ Creates a list of lines from a text file.
+        If the line "IGNOREUP" exists, then exclude all lines
+        beforehand and only return the lines after.
 
     Args:
-        file_dir ([type]): [description]
-        IGNOREUP_exists (bool, optional): [description]. Defaults to False.
+        file_dir ([str]): the path to the source file
+        IGNOREUP_exists (bool, optional): If true, the method will
+        look for the key. If not found, an error will be raised.
+        Defaults to False.
 
     Returns:
         list: [description]
@@ -22,33 +26,35 @@ def ____get_lines_(file_dir, IGNOREUP_exists=False) -> list:
     file = open(file_dir)
     lines = []
 
-    line = ""
+    line = file.readline()
 
     while line:
         if not line:
             break
 
-        lines.append(line.readline())
+        lines.append(line)
+        line = file.readline()
 
     # starting from the bottom of the text file
     # search for the ignore key.
     # the line where the ignore key is will be the starting point
 
-    index = 0
-
     if(IGNOREUP_exists):
         index = len(lines) - 1
         while index > 0:
-            if(lines[index].strip() == "IGNOREUP"):
-                break
+            if(lines[index].strip() == IGNORE_KEY):
+                print("THE IGNORE KEY WAS FOUND")
+                # index + 1 in order to ignore the ignore key
+                # and return the rest of the file
+                return lines[(index+1):len(lines)]
 
             index -= 1
 
-        raise Exception("IGNOREUP_exists = True but IGNOREUP was not found in."
-                        "the source.")
+        raise Exception("IGNOREUP_exists = True but IGNOREUP was not"
+                        "found in the source.")
 
     # index + 1 in order to ignore the ignore key
-    return lines[(index + 1):len(lines)]
+    return lines
 
 
 def get_lines(file_dir, look_for_ignore_up=False):
@@ -157,7 +163,7 @@ def _convert_to_tuples(lines):
     return cards
 
 
-def __convert_to_tuples(lines) -> list:
+def _convert_to_tuples_(lines) -> list:
     """Converts the lines that are in a text file into question and answer
        tuples (question, answer)
 
@@ -189,10 +195,12 @@ def __convert_to_tuples(lines) -> list:
             answer = i
 
             _QA = (question, answer)
-            _check_QA_is_valid(_QA)
+            # _check_QA_is_valid(_QA)
             cards.append(_QA)
 
             look_for = QUESTION
+
+    return cards
 
 
 def _convert_tuples_to_anki(data) -> str:
