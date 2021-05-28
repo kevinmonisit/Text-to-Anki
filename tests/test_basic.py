@@ -110,9 +110,9 @@ class TestParsing(unittest.TestCase):
 
     def test_dynamic_QA_parsing(self):
         # rename the _get_lines method
-        lines = converter._get_lines_('./tests/samples/dynamic1.txt',
-                                      IGNOREUP_exists=True)
-        cards = converter._convert_to_tuples_(lines)
+        lines = converter.get_lines('./tests/samples/dynamic1.txt',
+                                    STARTHERE_key_exists=True)
+        cards = converter._convert_to_tuples(lines)
 
         self.assertEqual(6, len(cards))
 

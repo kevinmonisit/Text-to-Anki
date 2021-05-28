@@ -5,17 +5,17 @@ Converts text to anki
 from os import error
 import warnings
 
-IGNORE_KEY = "IGNOREUP"
+STARTHERE_KEY = "STARTHERE"
 
 
-def _get_lines_(file_dir, IGNOREUP_exists=False) -> list:
+def get_lines(file_dir, STARTHERE_key_exists=False) -> list:
     """ Creates a list of lines from a text file.
         If the line "IGNOREUP" exists, then exclude all lines
         beforehand and only return the lines after.
 
     Args:
         file_dir ([str]): the path to the source file
-        IGNOREUP_exists (bool, optional): If true, the method will
+        STARTHERE_key_exists (bool, optional): If true, the method will
         look for the key. If not found, an error will be raised.
         Defaults to False.
 
@@ -32,77 +32,28 @@ def _get_lines_(file_dir, IGNOREUP_exists=False) -> list:
         if not line:
             break
 
-        lines.append(line)
+        lines.append(line.strip())
         line = file.readline()
 
     # starting from the bottom of the text file
     # search for the ignore key.
     # the line where the ignore key is will be the starting point
 
-    if(IGNOREUP_exists):
+    if(STARTHERE_key_exists):
         index = len(lines) - 1
         while index > 0:
-            if(lines[index].strip() == IGNORE_KEY):
-                print("THE IGNORE KEY WAS FOUND")
+            if(lines[index].strip() == STARTHERE_KEY):
+                print("THE STARTHERE KEY WAS FOUND")
                 # index + 1 in order to ignore the ignore key
                 # and return the rest of the file
                 return lines[(index+1):len(lines)]
 
             index -= 1
 
-        raise Exception("IGNOREUP_exists = True but IGNOREUP was not"
+        raise Exception("STARTHERE_key_exists = True but STARTHERE_KEY was not"
                         "found in the source.")
 
     # index + 1 in order to ignore the ignore key
-    return lines
-
-
-def get_lines(file_dir, look_for_ignore_up=False):
-    """Creates an array of lines from a text file
-
-    Args:
-        file_dir ([str]): file directory to read
-
-    Returns:
-        [list]: a list of all lines from text file
-    """
-    file = open(file_dir)
-    lines = []
-
-    line = file.readline()
-
-    begin_adding_entries = False
-
-    # if we aren't looking for an ignore key
-    # we can just start adding entries from the start of the text file
-    if not look_for_ignore_up:
-        begin_adding_entries = True
-
-    while line:
-
-        if not line:
-            break
-
-        if line.strip() == IGNORE_KEY:
-            # start adding new QA entries
-            begin_adding_entries = True
-
-            # skip the line where the ignore key ist
-            line = file.readline()
-
-        if len(line) > 0 and begin_adding_entries:
-            lines.append(line.strip())
-
-        line = file.readline()
-
-    number_of_lines = len(lines)
-
-    if number_of_lines % 4 != 0:
-        warnings.warn("Text file has uneven question-to-field format. (n = {})"
-                      .format(number_of_lines), RuntimeWarning)
-
-    file.close()
-
     return lines
 
 
@@ -129,41 +80,7 @@ def convert_to_anki(content) -> tuple:
     return _convert_tuples_to_anki(typed), _convert_tuples_to_anki(non_typed)
 
 
-def _convert_to_tuples(lines):
-    """
-        Converts lines to a list of tuples which are in a (question, answer)
-        format.
-    """
-
-    cards = []
-    number_of_lines = len(lines)
-
-    index = 0
-    index_to_start = 0
-
-    while index < number_of_lines:
-
-        # @TODO
-        # index_to_start will not be the correct index in the cards list
-        if lines[index] == 'IGNOREUP':
-            index_to_start = index
-
-        if index + 2 < number_of_lines:
-            _QA = (lines[index], lines[index + 2])
-            _check_QA_is_valid(_QA)
-
-            cards.append(_QA)
-
-        index += 4
-
-    if index_to_start == 0 and lines[0] != 'IGNOREUP':
-        warnings.warn("IGNOREUP was not found in the text file. \
-            Converting entire text file to anki cards.", RuntimeWarning)
-
-    return cards
-
-
-def _convert_to_tuples_(lines) -> list:
+def _convert_to_tuples(lines) -> list:
     """Converts the lines that are in a text file into question and answer
        tuples (question, answer)
 
@@ -184,7 +101,7 @@ def _convert_to_tuples_(lines) -> list:
 
     for i in lines:
 
-        if len(i) <= 1:
+        if len(i) < 1:
             continue
 
         if look_for == QUESTION:
