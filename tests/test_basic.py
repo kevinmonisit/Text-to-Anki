@@ -108,13 +108,42 @@ class TestBasic(unittest.TestCase):
 
 class TestParsing(unittest.TestCase):
 
-    def test_dynamic_QA_parsing(self):
-        # rename the _get_lines method
-        lines = converter.get_lines('./tests/samples/dynamic1.txt',
-                                    STARTHERE_key_exists=True)
-        cards = converter._convert_to_tuples(lines)
+    def _create_cards_from_test_files(self):
+        test_file_1 = converter.get_lines('./tests/samples/dynamic1.txt',
+                                          STARTHERE_key_exists=True)
 
-        self.assertEqual(6, len(cards))
+        test_file_2 = converter.get_lines('./tests/samples/dynamic2.txt',
+                                          STARTHERE_key_exists=True)
+
+        cards_1 = converter._convert_to_tuples(test_file_1)
+        cards_2 = converter._convert_to_tuples(test_file_2)
+
+        return cards_1, cards_2
+
+    def test_dynamic_QA_parsing(self):
+        """
+        Tests that the number of question and answer pairs are correct
+        """
+        cards_1, cards_2 = self._create_cards_from_test_files();
+
+        self.assertEqual(6, len(cards_1))
+        self.assertEqual(6, len(cards_2))
+
+    def test_QA_content(self):
+        """
+        Tests whether the content in dynamic1.txt and dynamic2.txt is
+        parsed correctly and the content is what is expected.
+        """
+
+        content = self._create_cards_from_test_files()
+
+        # card lists containts tuples of (question, answer)
+        for card_list in content:
+            for QA_entry in card_list:
+                test = (QA_entry[0].strip() == "Question" and
+                        QA_entry[1].strip() == "Answer")
+
+                self.assertTrue(test)
 
 
 if __name__ == "__main__":

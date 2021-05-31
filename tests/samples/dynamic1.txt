@@ -10,7 +10,7 @@ STARTHERE
 Question
 Answer
 
-Question @T
+Question
 
 
 Answer
