@@ -92,6 +92,11 @@ class TestBasic(unittest.TestCase):
 
         self.assertEqual(content, expected_content)
 
+    def test_removal_of_possible_tokens(self):
+        question = [("hello, ", "there")]
+
+        self.assertTrue(False)
+
     def test_ignore_up_key(self):
         """
         Successfully ignore lines above ignore up key.
@@ -124,7 +129,7 @@ class TestParsing(unittest.TestCase):
         """
         Tests that the number of question and answer pairs are correct
         """
-        cards_1, cards_2 = self._create_cards_from_test_files();
+        cards_1, cards_2 = self._create_cards_from_test_files()
 
         self.assertEqual(6, len(cards_1))
         self.assertEqual(6, len(cards_2))

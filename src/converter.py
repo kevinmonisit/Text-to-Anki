@@ -7,6 +7,14 @@ import warnings
 
 STARTHERE_KEY = "STARTHERE"
 
+# card-type ID
+TYPED = 0
+NOT_TYPED = 1
+
+DEFAULT_ANSWER_TYPE = "typed"
+TYPED_ANSWER_TOKEN = "@T"
+NON_TYPED_ANSWER_TOKEN = "@NT"
+
 
 def get_lines(file_dir, STARTHERE_key_exists=False) -> list:
     """ Creates a list of lines from a text file.
@@ -53,7 +61,6 @@ def get_lines(file_dir, STARTHERE_key_exists=False) -> list:
         raise Exception("STARTHERE_key_exists = True but STARTHERE_KEY was not"
                         "found in the source.")
 
-    # index + 1 in order to ignore the ignore key
     return lines
 
 
@@ -148,11 +155,13 @@ def _convert_tuples_to_anki(data) -> str:
     return content
 
 
-def _divide_tuples_by_type(tuples_list) -> tuple:
+def _divide_tuples_by_type(tuples_list_of_cards) -> tuple:
     """
 
         Tests the functionality of adding a sign that the card's
-        answer is meant to be typed or not.
+        answer is meant to be typed or not. There are two meanings of 'type'
+        being used: the classification of a card and whether or not
+        the card is supposed to have a 'typed' answer.
 
         If there is a 'T' or 't', the answer will be typed.
 
@@ -161,50 +170,64 @@ def _divide_tuples_by_type(tuples_list) -> tuple:
 
     Args:
         lines ([list]): Receives list of tuples in (question, answer) format
+
+    Returns:
+        [tuple]: (list of typed QAs, list of non-typed QAs)
     """
 
     typed_questions = []
     non_typed_questions = []
 
-    # tuples list is list of (questions, answer)
-    for i in tuples_list:
+    # tuples_list_of_cards = [(question, answer) ... ]
+    for i in tuples_list_of_cards:
 
-        question = i[0]
-        answer = i[1]
+        question, possible_token = _remove_token(i[0])
 
-        if '?' not in question:
-            print("Error for the question: {}".format(question))
-            raise ValueError("Question incorrectly formatted."
-                             "Line does not have a question mark at the end"
-                             "of the"
-                             "question.")
+        QA_ = (question, i[1])
 
-        # Format of i[0] would be "<question> <?> <typed answer or not>"
-        # question = [<question>, <type>]
-        # if there is no 'T', then the question is assumed to be not typed
-        question_split = question.split('?')
-        question_and_answer = (question_split[0] + '?', answer)
+        if(possible_token is None):
+            if DEFAULT_ANSWER_TYPE == TYPED:
+                typed_questions.append(QA_)
+            else:
+                non_typed_questions.append(QA_)
 
-        if (len(question_split) > 1 and
-                question_split[1].strip().lower() == "t"):
-            # i[1] is the answer in (question, answer)
-            typed_questions.append(question_and_answer)
+        if (possible_token == TYPED_ANSWER_TOKEN):
+            typed_questions.append(QA_)
+        elif(possible_token == NON_TYPED_ANSWER_TOKEN):
+            non_typed_questions.append(QA_)
         else:
-            non_typed_questions.append(question_and_answer)
+            raise ValueError("Token is unknown.")
 
     return typed_questions, non_typed_questions
 
 
-def _check_QA_is_valid(entry: tuple):
-    """Checks whether a QA entry is valid.
+def _remove_token(question) -> str:
+    """
+    This is a helper function to _divide_tuples_by_type.
+    Removes and returns the token at the end of a question that determines
+    whether the answer is meant to be typed or not, if any.
 
     Args:
-        entry ([tuple]): a tuple in the format of (question, answer)
+        question ([str]): question literal that derives from a
+        (question, answer) tuple pair.
+
+    Returns:
+        str: returns both the new question literal and the token removed. If
+             token does not exist, it will return None.
     """
+    _question = question.split('@')
 
-    if '?' not in entry[0]:
-        print("Error at question {}".format(entry[0]))
-        raise ValueError("An entry does not have a question mark in its"
-                         "question")
+    if(len(_question) < 1):
+        raise ValueError("Uncertain question has no spaces.")
 
-    return True
+    question_without_token = question[0:len(_question[1])]
+
+    # token may or may note exist
+    possible_token = _question[len(_question) - 1]
+
+    if possible_token == TYPED_ANSWER_TOKEN:
+        return question_without_token, TYPED
+    elif possible_token == NON_TYPED_ANSWER_TOKEN:
+        return question_without_token, NOT_TYPED
+    else:
+        return question_without_token, None
