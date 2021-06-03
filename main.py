@@ -4,30 +4,47 @@ Main module. Run to convert text files to anki-importable cards.
 
 import sys
 import src.converter as converter
-
+import argparse
+import os.path
+from os import path
 
 if __name__ == "__main__":
     """
-        Make a choice of whether to make a file or not.
-
-        python3 main.py source.txt > cards.txt
-            - if there are multiple typed or non-typed, or tags,
-            divide them up in the text file
 
         python3 main.py source.txt
-            if second parameter not present, make a cards.txt file
-            unlike the first option, the program will make
-            multiple text files separating the categories.
+        python 3 main.py -p ./path/to/add/files
     """
 
-    if len(sys.argv) == 2:
-        source = sys.argv[1]
-        lines = converter.get_lines(source, look_for_ignore_up=True)
+    parser = argparse.ArgumentParser()
+    parser.add_argument("source",
+                        help="the path to a correctly formatted text file")
+    parser.add_argument("-p", "--path",
+                        help="Specify the path where output will go",
+                        default="./")
+    parser.add_argument("--s",
+                        metavar="starting-point-specified",
+                        nargs="?",
+                        help="Whether to look for a STARTHERE token or not. \
+                                Default is True.",
+                        choices=[False, True],
+                        default=True)
 
-        content = converter.convert_to_anki(lines)
-        for i in content:
-            print(i)
+    args = parser.parse_args()
 
-    else:
-        raise Exception("Invalid number of arguments."
-                        "Check README.md on how to use.")
+    path = args.path
+    source = args.source
+    starting_point_exists = args.s
+
+    print([path, source, starting_point_exists].join(' '))
+
+    # if len(sys.argv) == 2:
+    #     source = sys.argv[1]
+    #     lines = converter.get_lines(source, look_for_ignore_up=True)
+
+    #     content = converter.convert_to_anki(lines)
+    #     for i in content:
+    #         print(i)
+
+    # else:
+    #     raise Exception("Invalid number of arguments."
+    #                     "Check README.md on how to use.")
