@@ -12,8 +12,8 @@ TYPED = 0
 NOT_TYPED = 1
 
 DEFAULT_ANSWER_TYPE = "typed"
-TYPED_ANSWER_TOKEN = "@T"
-NON_TYPED_ANSWER_TOKEN = "@NT"
+TYPED_ANSWER_TOKEN = "T"
+NON_TYPED_ANSWER_TOKEN = "NT"
 
 
 def get_lines(file_dir, STARTHERE_key_exists=False) -> list:
@@ -215,19 +215,20 @@ def _remove_token(question) -> str:
         str: returns both the new question literal and the token removed. If
              token does not exist, it will return None.
     """
+    if(question.find('@') == -1):
+        return question, None
+
     _question = question.split('@')
 
-    if(len(_question) < 1):
-        raise ValueError("Uncertain question has no spaces.")
-
-    question_without_token = question[0:len(_question[1])]
+    question_without_token = _question[0]
 
     # token may or may note exist
-    possible_token = _question[len(_question) - 1]
+    possible_token = _question[len(_question) - 1].strip().lower()
+    # put warning if there is an @ char but an incorrect type ID
 
-    if possible_token == TYPED_ANSWER_TOKEN:
+    if possible_token == TYPED_ANSWER_TOKEN.lower():
         return question_without_token, TYPED
-    elif possible_token == NON_TYPED_ANSWER_TOKEN:
+    elif possible_token == NON_TYPED_ANSWER_TOKEN.lower():
         return question_without_token, NOT_TYPED
     else:
         return question_without_token, None

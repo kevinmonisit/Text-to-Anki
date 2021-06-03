@@ -93,9 +93,27 @@ class TestBasic(unittest.TestCase):
         self.assertEqual(content, expected_content)
 
     def test_removal_of_possible_tokens(self):
-        question = [("hello, ", "there")]
+        questions = ["First, ", "Second",
+                     "Third@T", "Fourth@T ",
+                     "Fifth @TT", "Sixth @@T",
+                     "Seventh @NT ", "Eight @NT @NT"]
 
-        self.assertTrue(False)
+        TYPED = converter.TYPED
+        NOT_TYPED = converter.NOT_TYPED
+        expect = [("First, ", None),
+                  ("Second", None),
+                  ("Third", TYPED),
+                  ("Fourth", TYPED),
+                  ("Fifth ", None),
+                  ("Sixth ", TYPED),
+                  ("Seventh ", NOT_TYPED),
+                  ("Eight ", NOT_TYPED)]
+
+        output_questions = []
+        for i in questions:
+            output_questions.append(converter._remove_token(i))
+
+        self.assertEqual(output_questions, expect)
 
     def test_ignore_up_key(self):
         """
