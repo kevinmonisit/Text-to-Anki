@@ -235,4 +235,9 @@ def _remove_token(question) -> str:
     elif possible_token == NON_TYPED_ANSWER_TOKEN.lower():
         return question_without_token, NOT_TYPED
     else:
+        warnings.warn("A \'@\' is found in a question without a valid token. \
+                      The question is {}. If intended, ignore this warning.".
+                      format(
+                          question[0]
+                      ))
         return question_without_token, None

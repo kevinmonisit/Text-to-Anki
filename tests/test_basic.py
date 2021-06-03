@@ -60,14 +60,14 @@ class TestBasic(unittest.TestCase):
 
     # tests that are yet to be implemented.
     def test_typed_answers_error(self):
-        content = [("What is my name", "Kevin")]
+        content = [("What is my name @G", "Kevin")]
 
-        self.assertRaises(ValueError,
-                          lambda: converter._divide_tuples_by_type(content))
+        with self.assertWarns(UserWarning):
+            converter._divide_tuples_by_type(content)
 
     def test_typed_answers(self):
-        content = [("What is my name? T", "Kevin"),
-                   ("2 + 2 = ?", "4")]
+        content = [("What is my name? ", "Kevin"),
+                   ("2 + 2 = ? @NT", "4")]
 
         data = converter._divide_tuples_by_type(content)
 

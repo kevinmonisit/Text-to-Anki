@@ -37,6 +37,9 @@ if __name__ == "__main__":
 
     print([path, source, starting_point_exists].join(' '))
 
+    lines = converter.get_lines(source,
+                                STARTHERE_key_exists=starting_point_exists)
+
     # if len(sys.argv) == 2:
     #     source = sys.argv[1]
     #     lines = converter.get_lines(source, look_for_ignore_up=True)
