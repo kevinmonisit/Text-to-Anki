@@ -26,8 +26,9 @@ if __name__ == "__main__":
                         nargs="?",
                         help="Whether to look for a STARTHERE token or not. \
                                 Default is True.",
-                        choices=[False, True],
-                        default=True)
+                        choices=[0, 1],
+                        default=True,
+                        type=int)
 
     args = parser.parse_args()
 
@@ -35,19 +36,10 @@ if __name__ == "__main__":
     source = args.source
     starting_point_exists = args.s
 
-    print([path, source, starting_point_exists].join(' '))
-
     lines = converter.get_lines(source,
                                 STARTHERE_key_exists=starting_point_exists)
 
-    # if len(sys.argv) == 2:
-    #     source = sys.argv[1]
-    #     lines = converter.get_lines(source, look_for_ignore_up=True)
-
-    #     content = converter.convert_to_anki(lines)
-    #     for i in content:
-    #         print(i)
-
-    # else:
-    #     raise Exception("Invalid number of arguments."
-    #                     "Check README.md on how to use.")
+    typed, not_typed = converter.convert_to_anki(lines)
+    print(typed)
+    print("=====")
+    print(not_typed)

@@ -51,7 +51,9 @@ def get_lines(file_dir, STARTHERE_key_exists=False) -> list:
         index = len(lines) - 1
         while index > 0:
             if(lines[index].strip() == STARTHERE_KEY):
-                print("THE STARTHERE KEY WAS FOUND")
+                print(("# ** The STARTHERE key was found on line {}."
+                       " ** ").format(index))
+
                 # index + 1 in order to ignore the ignore key
                 # and return the rest of the file
                 return lines[(index+1):len(lines)]
@@ -238,6 +240,6 @@ def _remove_token(question) -> str:
         warnings.warn("A \'@\' is found in a question without a valid token. \
                       The question is {}. If intended, ignore this warning.".
                       format(
-                          question[0]
+                          question
                       ))
         return question_without_token, None
