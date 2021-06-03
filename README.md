@@ -8,6 +8,16 @@ When reading a document or watching a video in a language you want to learn, the
 
 Another easier way is to open a text editor while reading/watching something and quickly writing down a question and answer for a new fact; this way, you are maintaing the momentum of your focus when studying. Then, at the end of the study session and with the use of Text2Anki, you can import your rudimentary flash cards _en masse_ into Anki.
 
+### Can't I just follow the Anki documents on importing a text file?
+In the Anki documents, the format for importing a text file is like so:
+```
+cards.txt
+What is 2+2?;4
+What is the airspeed velocity of an unladen swallow?;Depends on whether or not it's an African or European swallow.
+[Question];[Answer]
+```
+This is the format that text2anki converts a source file to. What `cards.txt` lacks is line flexibility and organization features that text2Anki offers. However, if that is not an issue, this script is unneeded.
+
 ## Installation
 
 Use the package manager [pip](https://pip.pypa.io/en/stable/) to install Text2Anki.
