@@ -15,18 +15,17 @@ class TestBasic(unittest.TestCase):
     def setUp(self):
         self.test_content = "What is my name?\n\nKevin\n\n2+2=?\n\n4"
         self.test_file_name = "./tests/__tester__.txt"
-        self.questions = ["What is my name? T",
-                          "What is my name?? T",
-                          "What is my name? ",
-                          "What is my name? TT",
-                          "What is name T",
-                          "What is the name?T ",
-                          "What is my name T"]
+        self.questions = ["1? @T",
+                          "2? ",
+                          "3? @NT",
+                          "4?@T ",
+                          "5 @T"]
 
         self.test_QAs = []
+        self.test_answer = "test answer"
 
         for i in self.questions:
-            self.test_QAs.append((i, "test answer"))
+            self.test_QAs.append((i, self.test_answer))
 
     def _write_test_file(self):
         if os.path.exists(self.test_file_name):
@@ -81,18 +80,26 @@ class TestBasic(unittest.TestCase):
         self.assertEqual(data, expected_data)
 
     def test_typed_answers_output(self):
-        self._write_test_file()
+        # TODO: Make the question list an instance of this class
+        # so that it can be used in other test functions
 
-        lines = converter.get_lines(self.test_file_name)
-        content = converter.convert_to_anki(lines)
+        typed, non_typed = converter._divide_tuples_by_type(self.test_QAs)
 
         # expected content will be two lists: one of typed and non-typed
         # answers
-        expected_content = ('', 'What is my name?;Kevin\n2+2=?;4\n')
+        expected_typed = [("1?", self.test_answer),
+                          ("2?", self.test_answer),
+                          ("4?", self.test_answer),
+                          ("5", self.test_answer)]
 
-        self.assertEqual(content, expected_content)
+        expected_non_typed = [("3?", self.test_answer)]
+
+        self.assertEqual(typed, expected_typed)
+        self.assertEqual(expected_non_typed, non_typed)
 
     def test_removal_of_possible_tokens(self):
+        # could most likely share questions list with
+        # test_typed_answers_output test
         questions = ["First, ", "Second",
                      "Third@T", "Fourth@T ",
                      "Fifth @TT", "Sixth @@T",

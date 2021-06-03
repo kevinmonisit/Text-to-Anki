@@ -11,7 +11,7 @@ STARTHERE_KEY = "STARTHERE"
 TYPED = 0
 NOT_TYPED = 1
 
-DEFAULT_ANSWER_TYPE = "typed"
+DEFAULT_ANSWER_TYPE = TYPED
 TYPED_ANSWER_TOKEN = "T"
 NON_TYPED_ANSWER_TOKEN = "NT"
 
@@ -183,7 +183,7 @@ def _divide_tuples_by_type(tuples_list_of_cards) -> tuple:
 
         question, possible_token = _remove_token(i[0])
 
-        QA_ = (question, i[1])
+        QA_ = (question.strip(), i[1])
 
         if(possible_token is None):
             if DEFAULT_ANSWER_TYPE == TYPED:
@@ -191,12 +191,16 @@ def _divide_tuples_by_type(tuples_list_of_cards) -> tuple:
             else:
                 non_typed_questions.append(QA_)
 
-        if (possible_token == TYPED_ANSWER_TOKEN):
+            continue
+
+        if (possible_token == TYPED):
             typed_questions.append(QA_)
-        elif(possible_token == NON_TYPED_ANSWER_TOKEN):
+        elif(possible_token == NOT_TYPED):
             non_typed_questions.append(QA_)
         else:
-            raise ValueError("Token is unknown.")
+            raise ValueError(
+                "Token is {}, which should not be possible".format(
+                    possible_token))
 
     return typed_questions, non_typed_questions
 
