@@ -28,7 +28,7 @@ pip install Text2Anki
 
 ## Usage
 
-### Creating the source file
+### 1. Creating the source file
 The source file is expected to be a *.txt file. Here is the basic structure of a source file:
 ```
 What is 2 + 2? @T
@@ -40,26 +40,51 @@ Cuál es el significado de ¿Qué onda, wey?
 What's up, bro.
 
 Binomial Probability of at least x successes?
-
 1 - binomcdf(n, p, x-1)
 
 How do you quickly count the number of digits in a number in Java? @T
+
+
 
 (int) Math.log10(nums[i] + 1)
 
 ```
 
-Each _question-answer_ pair will be referred to as 'QA.' As of now, there are two types of questions: a question that has answer that **must be typed** and a question that has answer that is **not typed**.
+Each _question-answer_ pair will be referred to as 'QA.' As of now, there are two types of questions: a question that has answer that **must be typed** and a question that has answer that is **not typed**. The number of spaces between answers and questions do not matter.
 
 Key Tokens (if present, it must be at the end of the question):
 - `@T` defines a question with a typed answer
 - `@NT` defines a question without a typed answer
 
-If a question does not a token, the question is defaulted to `@T`. The default can be changed using the `-d` flag.
+If a question does not have a token, the question is defaulted to `@T`. The default can be changed using the `-d` flag.
 
-### Converting a source file to Anki-readable flash cards
+### 2. Converting a source file to Anki-readable flash cards
+Once you have created the source file, go into your command prompt (Terminal for MacOS, cmd.exe for Windows, etc.). 
+Type:
+```
+text2Anki ./path/to/source.txt
+```
 
+If there are both typed and non-typed QA entries, then two files will be created in the current directory. You can specify the output directory by typing:
+```
+text2Anki ./path/to/source.txt -p ./path/to/output-folder
+```
+If you want to specify a starting point in your source file, you must have a line that states `STARTHERE` by itself.
+```
+Question
+Answer
+STARTHERE
+Question!
+Answer!
+```
+The only QA entry would be (Question!, Answer!). The program looks for `STARTHERE` as a default. To change this, type `text2Anki --help` for more details.
 
+### 3. Importing output text files into Anki
+The output text file names will depend on whether or not questions have typed answers or not (more customizations will come at a later date). As an example, let's say the only output is `typed_QAs.txt`, signifying that all questions in the `source.txt`file contained questions with typed answers. 
+
+In order to import, go tino
+
+### Possible Problems
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
