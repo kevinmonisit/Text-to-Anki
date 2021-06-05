@@ -77,14 +77,31 @@ STARTHERE
 Question!
 Answer!
 ```
-The only QA entry would be (Question!, Answer!). The program looks for `STARTHERE` as a default. To change this, type `text2Anki --help` for more details.
+The only QA entry would be (Question!, Answer!). The program looks for `STARTHERE` **as a default**. To change this, type `text2Anki --help` for more details.
 
 ### 3. Importing output text files into Anki
 The output text file names will depend on whether or not questions have typed answers or not (more customizations will come at a later date). As an example, let's say the only output is `typed_QAs.txt`, signifying that all questions in the `source.txt`file contained questions with typed answers. 
 
-In order to import, go tino
+Before doing the next steps, open the newly created text file and verify that the question and answers are correctly paired up. One wrong entry can wrongly shift all questions, creating wrong question-answer pairs thereafter.
+
+- In order to import, open the Anki app on a desktop and click `Import File`. 
+- Select the text file that was recently created. If the text file contains questions wtih typed answers, change the `Type` to `Basic (type in the answer)`. If the text file contains questions without typed answers, select `Basic`. 
+- Specify the `Deck`.
+- Make sure that `Fields separated by:`is by semicolon.
+- Check the `Allow HTML in fields` checkbox.
+- Click `Import`.
 
 ### Possible Problems
+**Question and Answers are incorrectly paired**
+
+After creating the new text file, check if the questions and answers are correctly paired up. It will be obvious because it may look like this:
+```
+Question;Answer
+Answer;Question
+Answer;Question
+```
+
+In this output, there is a missing question which shifts each answer down---ultimately pairing each answer to the wrong question. 
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
