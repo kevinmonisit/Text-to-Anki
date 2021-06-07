@@ -29,17 +29,26 @@ if __name__ == "__main__":
                         choices=[0, 1],
                         default=True,
                         type=int)
+    parser.add_argument("--ending",
+                        metavar="suffix",
+                        nargs="?",
+                        help=("If specified, the program will add"
+                              "an ending note/suffix to the ending"
+                              "of all questions."),
+                        default=None,
+                        type=str)
 
     args = parser.parse_args()
 
     path = args.path
     source = args.source
     starting_point_exists = args.s
+    ending_suffix = args.ending
 
     lines = converter.get_lines(source,
                                 STARTHERE_key_exists=starting_point_exists)
 
-    typed, not_typed = converter.convert_to_anki(lines)
+    typed, not_typed = converter.convert_to_anki(lines, ending_suffix)
     print(typed)
     print("=====")
     print(not_typed)
