@@ -47,7 +47,7 @@ def get_lines(file_dir, STARTHERE_key_exists=False) -> list:
     # search for the ignore key.
     # the line where the ignore key is will be the starting point
 
-    if(STARTHERE_key_exists):
+    if STARTHERE_key_exists:
         index = len(lines) - 1
         while index > 0:
             if(lines[index].strip() == STARTHERE_KEY):
@@ -185,15 +185,10 @@ def _divide_tuples_by_type(tuples_list_of_cards,
     for i in tuples_list_of_cards:
 
         question, possible_token = _remove_token(i[0])
-        if add_question_suffix:
-            question_formatted = \
-                ("{} <strong>{}</strong>").format(question.strip(),
-                                                  str(add_question_suffix))
-            QA_ = (question_formatted, i[1])
-        else:
-            QA_ = (question.strip(), i[1])
 
-        if(possible_token is None):
+        QA_ = (_get_formatted_question(question, add_question_suffix), i[1])
+
+        if possible_token is None:
             if DEFAULT_ANSWER_TYPE == TYPED:
                 typed_questions.append(QA_)
             else:
@@ -201,9 +196,9 @@ def _divide_tuples_by_type(tuples_list_of_cards,
 
             continue
 
-        if (possible_token == TYPED):
+        if possible_token == TYPED:
             typed_questions.append(QA_)
-        elif(possible_token == NOT_TYPED):
+        elif possible_token == NOT_TYPED:
             non_typed_questions.append(QA_)
         else:
             raise ValueError(
@@ -211,6 +206,25 @@ def _divide_tuples_by_type(tuples_list_of_cards,
                     possible_token))
 
     return typed_questions, non_typed_questions
+
+
+def _get_formatted_question(question, suffix) -> str:
+    """Correctly formats a question and adds a suffix, if a suffix exists.
+
+    Args:
+        question ([str]): a question
+        suffix ([str]): a note to add at the end of the question
+
+    Returns:
+        [str]: a correctly formatted question with a possible suffix/note
+    """
+    if suffix:
+        question_formatted = \
+            ("{} <strong>{}</strong>").format(question.strip(),
+                                              str(suffix))
+        return question_formatted
+    else:
+        return question.strip()
 
 
 def _remove_token(question) -> str:
