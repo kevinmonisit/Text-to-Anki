@@ -66,7 +66,7 @@ def get_lines(file_dir, STARTHERE_key_exists=False) -> list:
     return lines
 
 
-def convert_to_anki(content) -> tuple:
+def convert_to_anki(content, add_question_suffix=None) -> tuple:
     """
     Converts data from a read text file into anki-importable text.
 
@@ -77,14 +77,14 @@ def convert_to_anki(content) -> tuple:
     Args:
         content ([list]): contains the lines of a source file that contains
         the questions and answers
-
+        add_question_suffix ([str]): adds an ending note to each question
     Returns:
         tuple of two lists: QAS with typed answers
         and QAs without typed answers
     """
 
     cards = _convert_to_tuples(content)
-    typed, non_typed = _divide_tuples_by_type(cards)
+    typed, non_typed = _divide_tuples_by_type(cards, add_question_suffix)
 
     return _convert_tuples_to_anki(typed), _convert_tuples_to_anki(non_typed)
 
@@ -157,7 +157,8 @@ def _convert_tuples_to_anki(data) -> str:
     return content
 
 
-def _divide_tuples_by_type(tuples_list_of_cards) -> tuple:
+def _divide_tuples_by_type(tuples_list_of_cards,
+                           add_question_suffix=None) -> tuple:
     """
 
         Tests the functionality of adding a sign that the card's
@@ -172,7 +173,7 @@ def _divide_tuples_by_type(tuples_list_of_cards) -> tuple:
 
     Args:
         lines ([list]): Receives list of tuples in (question, answer) format
-
+        add_question_suffix ([str]): adds an ending note to each question
     Returns:
         [tuple]: (list of typed QAs, list of non-typed QAs)
     """
@@ -184,8 +185,13 @@ def _divide_tuples_by_type(tuples_list_of_cards) -> tuple:
     for i in tuples_list_of_cards:
 
         question, possible_token = _remove_token(i[0])
-
-        QA_ = (question.strip(), i[1])
+        if add_question_suffix:
+            question_formatted = \
+                ("{} <strong>{}</strong>").format(question.strip(),
+                                                  str(add_question_suffix))
+            QA_ = (question_formatted, i[1])
+        else:
+            QA_ = (question.strip(), i[1])
 
         if(possible_token is None):
             if DEFAULT_ANSWER_TYPE == TYPED:

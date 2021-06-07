@@ -25,7 +25,7 @@ if __name__ == "__main__":
                         metavar="starting-point-specified",
                         nargs="?",
                         help="Whether to look for a STARTHERE token or not. \
-                                Default is True.",
+                                Default is True=1. (False=0)",
                         choices=[0, 1],
                         default=True,
                         type=int)

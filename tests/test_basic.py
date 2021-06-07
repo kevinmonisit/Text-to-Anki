@@ -122,6 +122,17 @@ class TestBasic(unittest.TestCase):
 
         self.assertEqual(output_questions, expect)
 
+    def test_question_suffix(self):
+        self._write_test_file()
+        content = converter.get_lines(self.test_file_name)
+
+        typed, not_typed = converter.convert_to_anki(content, "NOTE")
+        # self.test_content = "What is my name?\n\nKevin\n\n2+2=?\n\n4"
+        expected = ("What is my name? <strong>NOTE</strong>;Kevin\n2+2=? "
+                    "<strong>NOTE</strong>;4\n")
+
+        self.assertEqual(typed, expected)
+
     def test_ignore_up_key(self):
         """
         Successfully ignore lines above ignore up key.
