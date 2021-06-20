@@ -6,7 +6,7 @@ import sys
 import src.converter as converter
 import argparse
 import os.path
-from os import path
+from os import path, write
 
 if __name__ == "__main__":
     """
@@ -49,6 +49,19 @@ if __name__ == "__main__":
                                 STARTHERE_key_exists=starting_point_exists)
 
     typed, not_typed = converter.convert_to_anki(lines, ending_suffix)
+
     print(typed)
-    print("=====")
+    print("===== NOT TYPED BELOW =====")
     print(not_typed)
+
+    if(path):
+        files = [("typed_questions.txt", typed),
+                 ("not_typed_questions.txt", not_typed)]
+
+        for text_file in files:
+            if(os.path.exists(text_file[0])):
+                print("{} exists... overriding".format(text_file[0]))
+
+            file = open(text_file[0], "w")
+            file.write(text_file[1])
+            file.close()
