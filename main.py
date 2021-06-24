@@ -37,6 +37,15 @@ if __name__ == "__main__":
                               "of all questions."),
                         default=None,
                         type=str)
+    parser.add_argument("--separator",
+                        metavar='custom seperator token',
+                        nargs='?',
+                        help=('When converting to source text to card, entries'
+                              'are separated by a token. Default is a'
+                              'semicolon. However, this may cause problems'
+                              'and, thus, it can changed.'),
+                        default=';',
+                        type=str)
 
     args = parser.parse_args()
 
@@ -44,11 +53,14 @@ if __name__ == "__main__":
     source = args.source
     starting_point_exists = args.s
     ending_suffix = args.ending
+    separator = args.separator
 
     lines = converter.get_lines(source,
                                 STARTHERE_key_exists=starting_point_exists)
 
-    typed, not_typed = converter.convert_to_anki(lines, ending_suffix)
+    typed, not_typed = converter.convert_to_anki(lines,
+                                                 ending_suffix,
+                                                 separator_token=separator)
 
     print(typed)
     print("===== NOT TYPED BELOW =====")

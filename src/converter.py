@@ -2,7 +2,7 @@
 Converts text to anki
 """
 
-from os import error
+from os import error, sep
 import warnings
 
 STARTHERE_KEY = "STARTHERE"
@@ -66,7 +66,9 @@ def get_lines(file_dir, STARTHERE_key_exists=False) -> list:
     return lines
 
 
-def convert_to_anki(content, add_question_suffix=None) -> tuple:
+def convert_to_anki(content,
+                    add_question_suffix=None,
+                    separator_token=';') -> tuple:
     """
     Converts data from a read text file into anki-importable text.
 
@@ -86,7 +88,8 @@ def convert_to_anki(content, add_question_suffix=None) -> tuple:
     cards = _convert_to_tuples(content)
     typed, non_typed = _divide_tuples_by_type(cards, add_question_suffix)
 
-    return _convert_tuples_to_anki(typed), _convert_tuples_to_anki(non_typed)
+    return _convert_tuples_to_anki(typed, separator=separator_token), \
+        _convert_tuples_to_anki(non_typed, separator=separator_token)
 
 
 def _convert_to_tuples(lines) -> list:
@@ -129,7 +132,7 @@ def _convert_to_tuples(lines) -> list:
     return cards
 
 
-def _convert_tuples_to_anki(data) -> str:
+def _convert_tuples_to_anki(data, separator=';') -> str:
     """
     Converts tuples that are in a (Question, Answer) format
     into a string that is Anki-readable and can be
@@ -149,7 +152,7 @@ def _convert_tuples_to_anki(data) -> str:
     index = 0
 
     while index < len(data):
-        entry = "{};{}\n".format(data[index][0], data[index][1])
+        entry = "{}{}{}\n".format(data[index][0], separator, data[index][1])
         content += entry
 
         index += 1
