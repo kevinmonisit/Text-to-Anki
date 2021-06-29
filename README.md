@@ -79,6 +79,8 @@ Answer!
 ```
 The only QA entry would be (Question!, Answer!). The program looks for `STARTHERE` **as a default**. To change this, type `text2Anki --help` for more details.
 
+**If you are using this script to make programming questions, it should be noted that the default separator is a semicolon.** Because semicolons are commonplace in programming, a question or answer that contains a semicolon will cause unwanted effects. It is advised to change the separator by adding `--separator {separator that you want}` (e.g. `--separator $` will create a cards file where questions and answers are separated by `$`.
+
 ### 3. Importing output text files into Anki
 The output text file names will depend on whether or not questions have typed answers or not (more customizations will come at a later date). As an example, let's say the only output is `typed_QAs.txt`, signifying that all questions in the `source.txt`file contained questions with typed answers. 
 
