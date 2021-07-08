@@ -89,7 +89,7 @@ Before doing the next steps, open the newly created text file and verify that th
 - In order to import, open the Anki app on a desktop and click `Import File`. 
 - Select the text file that was recently created. If the text file contains questions wtih typed answers, change the `Type` to `Basic (type in the answer)`. If the text file contains questions without typed answers, select `Basic`. 
 - Specify the `Deck`.
-- Make sure that `Fields separated by:`is by semicolon.
+- Make sure that `Fields separated by:`is by a semicolon (or whatever separator you wish using `--separator {token}`).
 - Check the `Allow HTML in fields` checkbox.
 - Click `Import`.
 
