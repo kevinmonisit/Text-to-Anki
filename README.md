@@ -6,7 +6,7 @@ Text2Anki is a simple python script that quickly and easily creates [Anki](https
 
 When reading a document or watching a video in a language you want to learn, there are many things you want to remember. One way of remembering these facts is by creating an Anki flash card one by one. Constantly switching between reading a document and crafting an Anki flash card for a few seconds can be both distracting and time consuming.
 
-Another easier way is to open a text editor while reading/watching something and quickly writing down a question and answer for a new fact; this way, you are maintaing the momentum of your focus when studying. Then, at the end of the study session and with the use of Text2Anki, you can import your rudimentary flash cards _en masse_ into Anki.
+Another easier way is to open a text editor while reading/watching something and quickly writing down a question and answer for a new fact; this way, you are maintaining the momentum of your focus when studying. Then, at the end of the study session and with the use of Text2Anki, you can import your rudimentary flash cards _en masse_ into Anki.
 
 ### Can't I just follow the Anki documents on importing a text file?
 In the Anki documents, the format for importing a text file is like so:
