@@ -6,7 +6,7 @@ Text2Anki is a simple python script that quickly and easily creates [Anki](https
 
 When reading a document or watching a video in a language you want to learn, there are many things you want to remember. One way of remembering these facts is by creating an Anki flash card one by one. Constantly switching between reading a document and crafting an Anki flash card for a few seconds can be both distracting and time consuming.
 
-Another easier way is to open a text editor while reading/watching something and quickly writing down a question and answer for a new fact; this way, you are maintaing the momentum of your focus when studying. Then, at the end of the study session and with the use of Text2Anki, you can import your rudimentary flash cards _en masse_ into Anki.
+Another easier way is to open a text editor while reading/watching something and quickly writing down a question and answer for a new fact; this way, you are maintaining the momentum of your focus when studying. Then, at the end of the study session and with the use of Text2Anki, you can import your rudimentary flash cards _en masse_ into Anki.
 
 ### Can't I just follow the Anki documents on importing a text file?
 In the Anki documents, the format for importing a text file is like so:
@@ -79,6 +79,8 @@ Answer!
 ```
 The only QA entry would be (Question!, Answer!). The program looks for `STARTHERE` **as a default**. To change this, type `text2Anki --help` for more details.
 
+**If you are using this script to make programming questions, it should be noted that the default separator is a semicolon.** Because semicolons are commonplace in programming, a question or answer that contains a semicolon will cause unwanted effects. It is advised to change the separator by adding `--separator {separator that you want}` (e.g. `--separator $` will create a cards file where questions and answers are separated by `$`.
+
 ### 3. Importing output text files into Anki
 The output text file names will depend on whether or not questions have typed answers or not (more customizations will come at a later date). As an example, let's say the only output is `typed_QAs.txt`, signifying that all questions in the `source.txt`file contained questions with typed answers. 
 
@@ -87,7 +89,7 @@ Before doing the next steps, open the newly created text file and verify that th
 - In order to import, open the Anki app on a desktop and click `Import File`. 
 - Select the text file that was recently created. If the text file contains questions wtih typed answers, change the `Type` to `Basic (type in the answer)`. If the text file contains questions without typed answers, select `Basic`. 
 - Specify the `Deck`.
-- Make sure that `Fields separated by:`is by semicolon.
+- Make sure that `Fields separated by:`is by a semicolon (or whatever separator you wish using `--separator {token}`).
 - Check the `Allow HTML in fields` checkbox.
 - Click `Import`.
 
