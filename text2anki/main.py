@@ -3,7 +3,7 @@ Main module. Run to convert text files to anki-importable cards.
 """
 
 import sys
-import src.converter as converter
+import converter as converter
 import argparse
 import os.path
 from os import path, write
